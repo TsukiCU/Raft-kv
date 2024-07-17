@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <string>
-#include <exception>
+#include <stdexcept>
 
 #ifdef DEBUG
 #define LOG_DEBUG(format, ...) { fprintf(stderr, "DEBUG [%s:%d] " format "\n", strrchr(__FILE__, '/') + 1, __LINE__, ##__VA_ARGS__); }
