@@ -332,9 +332,9 @@ Status Raft::step(proto::MessagePtr msg) {
       // that these messages were simply delayed in the network, but this could
       // also mean that this node has advanced its term number during a network
       // partition, and it is now unable to either win an election or to rejoin
-      // the majority on the old term. If checkQuorum is false, this will be
+      // the majority on the old term. If check_quorum_ is false, this will be
       // handled by incrementing term numbers in response to MsgVote with a
-      // higher term, but if checkQuorum is true we may not advance the term on
+      // higher term, but if check_quorum_ is true we may not advance the term on
       // MsgVote and must generate other messages to advance the term. The net
       // result of these two features is to minimize the disruption caused by
       // nodes that have been removed from the cluster's configuration: a
@@ -354,9 +354,9 @@ Status Raft::step(proto::MessagePtr msg) {
       m->type = proto::MsgAppResp;
       send(std::move(m));
     } else if (msg->type == proto::MsgPreVote) {
-      // Before Pre-Vote enable, there may have candidate with higher term,
-      // but less log. After update to Pre-Vote, the cluster may deadlock if
-      // we drop messages with a lower term.
+      // Before Pre_Vote enable, there may be a receiving candidate with higher term,
+      // but less log. After update to Pre-Vote, the cluster may deadlock if we drop
+      // messages with a lower term.
       LOG_INFO(
           "%lu [log_term: %lu, index: %lu, vote: %lu] rejected %s from %lu [log_term: %lu, index: %lu] at term %lu",
           id_,

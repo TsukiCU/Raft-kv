@@ -143,6 +143,19 @@ RedisStore::RedisStore(RaftNode* server, std::vector<uint8_t> snap, uint16_t por
     std::swap(kv, key_values_);
   }
 
+  // initialize rocksdb.
+  rocksdb::Options options;
+  rocksdb::Status status;
+  options.create_if_missing = true;
+  rocksdb::DB* db_raw;
+  status = rocksdb::DB::Open(options, rocksdb_store_path, &db_raw);
+  if (status.ok()) {
+    db_.reset(db_raw);
+  }
+  else {
+    throw std::runtime_error("Failed to open RocksDB: " + status.ToString());
+  }
+
   auto address = boost::asio::ip::address::from_string("0.0.0.0");
   auto endpoint = boost::asio::ip::tcp::endpoint(address, port);
 
@@ -178,6 +191,10 @@ void RedisStore::start_accept() {
     this->start_accept();
     session->start();
   });
+}
+
+void RedisStore::rocks_set() {
+
 }
 
 void RedisStore::set(std::string key, std::string value, const StatusCallback& callback) {

@@ -64,8 +64,10 @@ class RedisStore {
     }
   }
 
+  void rocks_set();
   void set(std::string key, std::string value, const StatusCallback& callback);
 
+  void rocks_del();
   void del(std::vector<std::string> keys, const StatusCallback& callback);
 
   void get_snapshot(const GetSnapshotCallback& callback);
@@ -84,9 +86,12 @@ class RedisStore {
   boost::asio::ip::tcp::acceptor acceptor_;
   std::thread worker_;
   std::unordered_map<std::string, std::string> key_values_;
-  // used to use a simple unordered map to store key value pairs.
+
+  // Used to use a simple unordered map to store key value pairs.
   // Now extend to integrate RocksDB as the underlying storage system to achieve persistent storage.
   std::unique_ptr<rocksdb::DB> db_;
+  std::string rocksdb_store_path = "/tmp/raft_rocksdb/";
+
   uint32_t next_request_id_;
   std::unordered_map<uint32_t, StatusCallback> pending_requests_;
 };
