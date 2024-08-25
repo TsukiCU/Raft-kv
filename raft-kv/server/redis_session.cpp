@@ -196,7 +196,7 @@ void RedisSession::ping_command(std::shared_ptr<RedisSession> self, struct redis
 }
 
 void RedisSession::get_command(std::shared_ptr<RedisSession> self, struct redisReply* reply) {
-  assert(reply->type = REDIS_REPLY_ARRAY);
+  assert(reply->type == REDIS_REPLY_ARRAY);
   assert(reply->elements > 0);
   char buffer[256];
 
@@ -226,7 +226,7 @@ void RedisSession::get_command(std::shared_ptr<RedisSession> self, struct redisR
 }
 
 void RedisSession::set_command(std::shared_ptr<RedisSession> self, struct redisReply* reply) {
-  assert(reply->type = REDIS_REPLY_ARRAY);
+  assert(reply->type == REDIS_REPLY_ARRAY);
   assert(reply->elements > 0);
   char buffer[256];
 
@@ -256,7 +256,7 @@ void RedisSession::set_command(std::shared_ptr<RedisSession> self, struct redisR
 }
 
 void RedisSession::del_command(std::shared_ptr<RedisSession> self, struct redisReply* reply) {
-  assert(reply->type = REDIS_REPLY_ARRAY);
+  assert(reply->type == REDIS_REPLY_ARRAY);
   assert(reply->elements > 0);
   char buffer[256];
 
@@ -289,7 +289,7 @@ void RedisSession::del_command(std::shared_ptr<RedisSession> self, struct redisR
 }
 
 void RedisSession::keys_command(std::shared_ptr<RedisSession> self, struct redisReply* reply) {
-  assert(reply->type = REDIS_REPLY_ARRAY);
+  assert(reply->type == REDIS_REPLY_ARRAY);
   assert(reply->elements > 0);
   char buffer[256];
 

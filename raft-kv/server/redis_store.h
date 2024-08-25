@@ -4,6 +4,7 @@
 #include <thread>
 #include <future>
 #include <raft-kv/common/status.h>
+#include <raft-kv/common/log.h>
 #include <raft-kv/raft/proto.h>
 #include <msgpack.hpp>
 #include <rocksdb/db.h>
@@ -55,11 +56,28 @@ class RedisStore {
   void start(std::promise<pthread_t>& promise);
 
   bool get(const std::string& key, std::string& value) {
-    auto it = key_values_.find(key);
-    if (it != key_values_.end()) {
-      value = it->second;
+    // auto it = key_values_.find(key);
+    // if (it != key_values_.end()) {
+    //   value = it->second;
+    //   return true;
+    // } else {
+    //   return false;
+    // }
+
+    std::string result;
+    rocksdb::Status status = db_->Get(rocksdb::ReadOptions(), key, &result);
+    if (status.ok()) {
+      value = result;
       return true;
-    } else {
+    }
+    else if (status.IsNotFound()) {
+      // LOG_INFO("Attempt to get non-existent value.");
+      return false;
+    }
+      
+    else {
+      // failed when getting values.
+      // LOG_WARN("Bad entry. %s", status.ToString().c_str());
       return false;
     }
   }
@@ -85,10 +103,11 @@ class RedisStore {
   boost::asio::io_service io_service_;
   boost::asio::ip::tcp::acceptor acceptor_;
   std::thread worker_;
-  std::unordered_map<std::string, std::string> key_values_;
+  // std::unordered_map<std::string, std::string> key_values_;
 
   // Used to use a simple unordered map to store key value pairs.
   // Now extend to integrate RocksDB as the underlying storage system to achieve persistent storage.
+  //rocksdb::DB* db_;
   std::unique_ptr<rocksdb::DB> db_;
   std::string rocksdb_store_path = "/tmp/raft_rocksdb/";
 
