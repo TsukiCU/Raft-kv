@@ -138,9 +138,10 @@ RedisStore::RedisStore(RaftNode* server, std::vector<uint8_t> snap, uint16_t por
   // rocksdb::DB* db_raw;
   rocksdb_store_path += std::to_string(server_->node_id());
   rocksdb::DB* db_raw;
+  LOG_INFO("====== RocksDB initializing at %s.", rocksdb_store_path.c_str());
   status = rocksdb::DB::Open(options, rocksdb_store_path, &db_raw);
   if (status.ok()) {
-    LOG_INFO("====== RocksDB initialized at %s.", rocksdb_store_path.c_str());
+    LOG_INFO("====== RocksDB initialized successfully.");
     db_.reset(db_raw);
   }
   else {

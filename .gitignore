@@ -4,3 +4,4 @@ build
 *.sh
 .vscode/
 cmake-build-debug
+rocksdb/

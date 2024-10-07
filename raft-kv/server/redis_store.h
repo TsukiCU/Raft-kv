@@ -109,7 +109,7 @@ class RedisStore {
   // Now extend to integrate RocksDB as the underlying storage system to achieve persistent storage.
   //rocksdb::DB* db_;
   std::unique_ptr<rocksdb::DB> db_;
-  std::string rocksdb_store_path = "/tmp/raft_rocksdb/";
+  std::string rocksdb_store_path = "/home/tsuki/24fall/Raft-kv/rocksdb/";
 
   uint32_t next_request_id_;
   std::unordered_map<uint32_t, StatusCallback> pending_requests_;
